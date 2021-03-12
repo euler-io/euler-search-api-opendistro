@@ -3,8 +3,8 @@ from typing import Optional
 from elasticsearch import Elasticsearch
 from starlette.responses import JSONResponse
 from development.loaddata import create_sample_index, load_sample_data
-from euler.elasticsearch.utils import wait_elasticsearch
-from euler.elasticsearch import EulerSearch
+from fastapi_elasticsearch.utils import wait_elasticsearch
+from fastapi_elasticsearch import ElasticsearchAPI
 
 es = Elasticsearch(
     ["elastic-dev"],
@@ -21,7 +21,7 @@ if not es.indices.exists(index_name):
     create_sample_index(es, index_name)
     load_sample_data(es, index_name)
 
-euler_search = EulerSearch(
+euler_search = ElasticsearchAPI(
     es_client=es,
     index_name=index_name
 )
