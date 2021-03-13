@@ -1,1 +1,1 @@
-fastapi-elasticsearch>=0.1.0
+fastapi-elasticsearch>=0.3.6

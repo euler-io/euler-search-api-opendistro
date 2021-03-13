@@ -3,7 +3,7 @@ import lorem
 import names
 
 
-def create_sample_index(es: Elasticsearch, index_name: str):
+def create_sample_index(es: Elasticsearch, index_name: str, params=None, headers=None):
     return es.indices.create(
         index=index_name,
         ignore=400,
@@ -32,11 +32,13 @@ def create_sample_index(es: Elasticsearch, index_name: str):
                     }
                 }
             }
-        }
+        },
+        params=params,
+        headers=headers
     )
 
 
-def load_sample_data(es: Elasticsearch, index_name: str, num_docs=10):
+def load_sample_data(es: Elasticsearch, index_name: str, num_docs=10, params=None, headers=None):
     for i in range(num_docs):
         body = {
             "name": names.get_full_name(),
@@ -44,7 +46,12 @@ def load_sample_data(es: Elasticsearch, index_name: str, num_docs=10):
             "join_field": "item",
         }
         print(f"Creating sample data {body}.")
-        res = es.index(index=index_name, doc_type="_doc", routing=1, body=body)
+        res = es.index(index=index_name,
+                       doc_type="_doc",
+                       routing=1,
+                       body=body,
+                       params=params,
+                       headers=headers)
         doc_id = res["_id"]
         print(f"Created with id {doc_id}.")
         fragment_body = {
@@ -55,6 +62,11 @@ def load_sample_data(es: Elasticsearch, index_name: str, num_docs=10):
             },
         }
         print(f"Creating sample fragment data {fragment_body}.")
-        res = es.index(index=index_name, doc_type="_doc", routing=1, body=fragment_body)
+        res = es.index(index=index_name,
+                       doc_type="_doc",
+                       routing=1,
+                       body=fragment_body,
+                       params=params,
+                       headers=headers)
         doc_id = res["_id"]
         print(f"Created with id {doc_id}.")
